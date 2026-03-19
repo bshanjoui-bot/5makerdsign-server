@@ -13,7 +13,7 @@ users = {
 
 MAX_DOWNLOAD = 3
 
-GDRIVE_LINK = "https://drive.google.com/file/d/ISI_LINK_FILE_KAMU/view"
+GDRIVE_LINK = "https://drive.google.com/drive/folders/1lVfYDM620WOhTWjJFAKLc5ZT17cAV2gg"
 
 @app.route('/')
 def home():

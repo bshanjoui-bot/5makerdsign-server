@@ -3,16 +3,17 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-# database sederhana
+# database sederhana (max 100 user)
 users = {
-    "USER123": {
-        "created": datetime(2026, 3, 19),
-        "expired_days": 7
-    }
+    "USER001": {"created": datetime(2026, 3, 19), "expired_days": 7, "download_count": 0},
+    "USER002": {"created": datetime(2026, 3, 19), "expired_days": 7, "download_count": 0},
+    "USER003": {"created": datetime(2026, 3, 19), "expired_days": 7, "download_count": 0},
+    # lanjutkan sampai USER100
 }
 
-# link folder GDrive kamu
-GDRIVE_LINK = "https://drive.google.com/drive/folders/1lVfYDM620WOhTWjJFAKLc5ZT17cAV2gg"
+MAX_DOWNLOAD = 3
+
+GDRIVE_LINK = "https://drive.google.com/file/d/ISI_LINK_FILE_KAMU/view"
 
 @app.route('/')
 def home():
@@ -26,10 +27,18 @@ def download():
         return "Key tidak valid"
 
     user = users[key]
-    expire_time = user["created"] + timedelta(days=user["expired_days"])
 
+    # cek expired
+    expire_time = user["created"] + timedelta(days=user["expired_days"])
     if datetime.now() > expire_time:
         return "Link expired"
+
+    # cek limit download
+    if user["download_count"] >= MAX_DOWNLOAD:
+        return "Limit download tercapai"
+
+    # tambah count
+    user["download_count"] += 1
 
     return redirect(GDRIVE_LINK)
 
